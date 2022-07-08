@@ -12,5 +12,11 @@ const readCookie=name=>
 chrome.tabs.onCreated.addListener(newTab=>
 {
 	if(readCookie("new-tab-blocker")=="true")
-		chrome.tabs.remove(newTab.id);
+	{
+		chrome.tabs.get(newTab.id,tab=>
+		{
+			if(!tab.pendingUrl.startsWith("chrome://startpageshared"))
+				chrome.tabs.remove(newTab.id);
+		});
+	}
 });
